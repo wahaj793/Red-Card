@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons/css/boxicons.min.css">
+    <style>
+
+  body {
+      background-color: #eee;
+      background: url(img/toto.jpeg) no-repeat;
+      opacity: 0.9;
+
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-position: center;
+    background-size: cover;
+    
+
+    }
+
+    .login-koko{
+        background-color: #fff;
+        border-radius: 1rem;
+        filter: drop-shadow(1px 20px 20px grey);
+   
+    }
+
+     
+       .container{
+        width: 95%;
+        margin: .7rem 0;
+        background: #fff;
+        border-radius: .1rem;
+        padding: 1rem;
+        color: var(--black);
+        text-transform: none;
+        display: flex;
+        flex-direction: column;
+        width: 400px;
+        height:50%;
+    
+        
+       
+       
+       }
+
+       
+
+       input{
+        width: 95%;
+       padding: 10px;
+       margin: 10px 0;
+       background: #fff;
+       border-radius: 5px;
+
+ 
+       }
+
+       
+   
+
+       button{
+        width: 101%;
+        margin-top: 20px;
+        height: 40px;
+        border-radius: 5px;
+        background: #fff;
+       }
+       button:hover{
+        color: white;
+        background-color: black;
+       }
+
+       h1{
+        margin-bottom: 20px;
+        font-size: 2.5rem;
+        text-transform: uppercase;
+        color: var(--black);
+        text-align: center;
+       }
+
+       .pointer{
+        cursor: pointer;
+       }
+       p{
+        text-align: center;
+       }
+
+
+      
+      
+      
+     
+
+        /* Error & Success Messages */
+        .error-message, .success-message {
+            margin-top: 15px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .error-message {
+            color: red;
+        }
+
+        .success-message {
+            color: green;
+        }
+
+      
+    </style>
+</head>
+<body>
+
+    <section class="login-koko">
+    <div id="container" class="container">
+        <div class="col align-items-center flex-col sign-up fade-in">
+            <div class="form-wrapper align-items-center">
+                <div class="form sign-up">
+                    <form id="createAccountForm">
+                        <h1>sign up </h1>
+                        <div class="input-group">
+                          
+                            <input type="text" id="new-username" placeholder="Enter Username">
+                        </div>
+                        <div class="input-group">
+                    
+                            <input type="email" id="new-email" placeholder="Enter Email">
+                        </div>
+                        <div class="input-group">
+                            
+                            <input type="password" id="new-password" placeholder="Enter Password">
+                        </div>
+                        <div class="input-group">
+                          
+                            <input type="password" id="confirm-password" placeholder="Enter Confirm password">
+                        </div>
+                        <p>
+                            <span>Already have an account?</span>
+                            <b id="back-to-login-link" class="pointer">Sign in here</b>
+                        </p>
+                        <button type="submit" >Sign up</button>
+                        <div id="create-error-message" style="color:red; display:none; text-align: center;"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col align-items-center flex-col sign-in fade-in">
+            <div class="form-wrapper align-items-center">
+                <div class="form sign-in">
+                    <form id="loginForm">
+                        <h1>sign in </h1>
+                        <div class="input-group">
+                            <input type="text" id="email" placeholder="Enter Username">
+                        </div>
+                        <div class="input-group">
+                            <input type="password" id="password" placeholder="Enter Password">
+                        </div>
+                        <p>
+                            <span>Don't have an account?</span>
+                            <b id="create-account-link" class="pointer">Sign up here</b>
+                        </p>
+                        <button type="submit">Sign in</button>
+                     
+                        <div id="error-message" class="error-message" style="display:none;"></div>
+                        <div id="success-message" class="success-message" style="display:none;"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const loginForm = document.getElementById("loginForm");
+            const emailInput = document.getElementById("email");
+            const passwordInput = document.getElementById("password");
+            const errorMessage = document.getElementById("error-message");
+            const createAccountForm = document.getElementById('createAccountForm');
+            const createAccountLink = document.getElementById('create-account-link');
+            const backToLoginLink = document.getElementById('back-to-login-link');
+            const newEmailInput = document.getElementById("new-email");
+            const newPasswordInput = document.getElementById("new-password");
+            const confirmPasswordInput = document.getElementById("confirm-password");
+            const createErrorMessage = document.getElementById("create-error-message");
+            const successMessage = document.getElementById("success-message");
+
+            const savedEmail = localStorage.getItem('email');
+            const savedPassword = localStorage.getItem('password');
+
+            if (!savedEmail || !savedPassword) {
+                loginForm.style.display = 'none';
+                createAccountForm.style.display = 'block';
+            } else {
+                loginForm.style.display = 'block';
+                createAccountForm.style.display = 'none';
+            }
+
+            // Handle login form submit
+            loginForm.addEventListener("submit", function(e) {
+                e.preventDefault(); 
+
+                const email = emailInput.value.trim();
+                const password = passwordInput.value.trim();
+
+                errorMessage.style.display = 'none';
+                successMessage.style.display = 'none';
+
+                // Check if email and password match saved details
+                if (email === savedEmail && password === savedPassword) {
+                    successMessage.innerHTML = "<p>Login successful!</p>"; 
+                    successMessage.style.display = 'block';
+                } else {
+                    errorMessage.textContent = "Incorrect email or password!";
+                    errorMessage.style.display = 'block';
+                }
+            });
+
+            // Handle create account form submit
+            createAccountForm.addEventListener("submit", function(e) {
+                e.preventDefault(); 
+
+                const newEmail = newEmailInput.value.trim();
+                const newPassword = newPasswordInput.value.trim();
+                const confirmPassword = confirmPasswordInput.value.trim();
+
+                createErrorMessage.style.display = 'none';
+
+                if (!newEmail || !newPassword || !confirmPassword) {
+                    createErrorMessage.textContent = "Please fill in all fields!";
+                    createErrorMessage.style.display = 'block';
+                    return;
+                }
+
+                if (newPassword !== confirmPassword) {
+                    createErrorMessage.textContent = "Passwords do not match!";
+                    createErrorMessage.style.display = 'block';
+                    return;
+                }
+
+                const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+
+    if (!passwordRegex.test(newPassword)) {
+        createErrorMessage.textContent = "Password must be at least 8 characters long, contain at least one uppercase letter, one number, and one special character.";
+        createErrorMessage.style.display = 'block';
+        return;
+    }
+
+
+                localStorage.setItem('email', newEmail);
+                localStorage.setItem('password', newPassword);
+
+                window.location.href = 'home.html'; // Replace 'home.html' with your actual home page URL
+
+
+                createAccountForm.style.display = 'none';
+                loginForm.style.display = 'block';
+
+                successMessage.style.display = 'none';
+                successMessage.innerHTML = "<p>Account created successfully! Please login.</p>"; 
+                successMessage.style.display = 'block';
+            });
+
+            // Show the create account form
+            createAccountLink.addEventListener("click", function(e) {
+                e.preventDefault();
+                loginForm.style.display = 'none';
+                createAccountForm.style.display = 'block';
+            });
+
+            // Show the login form
+            backToLoginLink.addEventListener("click", function(e) {
+                e.preventDefault();
+                createAccountForm.style.display = 'none';
+                loginForm.style.display = 'block';
+            });
+        });
+    </script>
+</body>
+</html>
